@@ -1,9 +1,11 @@
 // Import
 import express from "express";
 import bodyParser from "body-parser";
-import path from "path";
+import bcrypt from "bcrypt";
+import pool from "./db.js";
+import dotenv from "dotenv";
 
-// Create express app and define port
+dotenv.config();
 const app = express();
 const port = 3000;
 
@@ -42,13 +44,29 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const user = users.find((u) => u.email === email && u.password === password);
-  if (user) {
-    res.redirect("/dashboard");
-  } else {
-    res.status(401).send("Invalid credentials");
+
+  try {
+    const [users] = await pool.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (users.length === 0) {
+      return res.status(400).send("User not found");
+    }
+
+    const user = users[0];
+    const match = await bcrypt.compare(password, user.password);
+
+    if (match) {
+      res.redirect("/dashboard");
+    } else {
+      res.status(401).send("Incorrect password");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error logging in");
   }
 });
 
@@ -57,13 +75,20 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
   const { email, password } = req.body;
-  if (email && password) {
-    users.push({ email, password });
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const [result] = await pool.query(
+      "INSERT INTO users (email, password) VALUES (?, ?)",
+      [email, hashedPassword]
+    );
+    console.log("User Registered:", result);
     res.redirect("/dashboard");
-  } else {
-    res.status(400).send("Please enter both email and password");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error creating account");
   }
 });
 
