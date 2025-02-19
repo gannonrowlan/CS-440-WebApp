@@ -64,3 +64,29 @@ span {
   font-weight: bold;
   color: #999;
 }
+
+.manage-books-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.manage-books-container li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.book-actions form {
+  display: inline-block;
+}
