@@ -2,13 +2,13 @@ version: 22.13.1
 
 services:
   app-service:
-      build: ./app-service
+      build: ./app_service
       ports: 
         - "8080:8080"
 
   
-  authentication-service:
-    build: ./authentication_service
+  authentication-services:
+    build: ./authentication_services
     ports: 
       - "5001:5001"  
   book-service:
