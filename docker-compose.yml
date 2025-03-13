@@ -7,6 +7,7 @@ services:
         - "8080:8080"
       volumes:
         - ./app_service:/app
+
   
   authentication-service:
     build: ./authentication_service
@@ -20,6 +21,7 @@ services:
       - "5002:5002"
     volumes:
       - ./book_service:/app
+      - book_data:/app/LibrarySystem
     networks:
       - booknet
 
@@ -30,7 +32,7 @@ services:
       - "5003:5003"
     volumes:
       - ./review_service:/app
-      - review_data:/app/data
+      - book_data:/app/LibrarySystem
     environment:
       - BOOK_SERVICE_URL=http://book-service:5002/api/books
     networks:
