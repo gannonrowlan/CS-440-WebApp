@@ -7,8 +7,8 @@ services:
         - "8080:8080"
 
   
-  authentication-services:
-    build: ./authentication_services
+  authentication-service:
+    build: ./authentication_service
     ports: 
       - "5001:5001"  
   book-service:

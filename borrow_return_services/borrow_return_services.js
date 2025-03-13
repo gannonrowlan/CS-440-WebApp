@@ -1,6 +1,6 @@
 // Import dependencies
 import pool from "./db.js";
-import authenticator from "../authentication_services/authentication.js"
+import authenticator from "../authentication_service/authentication.js"
 
 BOOK_SERVICE_URL = 'http://book-service:5001/api/books'
 
