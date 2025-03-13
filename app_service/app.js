@@ -2,11 +2,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
-import pool from "./db.js";
+import pool from "../db.js";
 import dotenv from "dotenv";
 import session from "express-session";
-import booksRoutes from "./book_service/books.js";
-import authenticator from "./authentication_services/authentication.js"
+import booksRoutes from "../book_service/books.js";
+import authenticator from "../authentication_service/authentication.js"
 
 dotenv.config();
 const app = express();
