@@ -6,6 +6,7 @@ import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
 import booksRoutes from "./book_service/books.js";
+import authenticator from "./authentication_services/authentication.js"
 
 dotenv.config();
 const app = express();
@@ -25,12 +26,12 @@ app.use(
 app.use("/books", booksRoutes);
 
 // Authentication Middleware
-const requireLogin = (req, res, next) => {
+/*const requireLogin = (req, res, next) => {
   if (!req.session.userId) {
     return res.redirect("/login");
   }
   next();
-};
+};*/
 
 // Welcome Page
 app.get("/", (req, res) => {
@@ -86,7 +87,7 @@ app.post("/signup", async (req, res) => {
 });
 
 // Dashboard Page
-app.get("/dashboard", requireLogin, async (req, res) => {
+app.get("/dashboard", authenticator.requireLogin, async (req, res) => {
   try {
     const [books] = await pool.query(
       "SELECT * FROM books ORDER BY RAND() LIMIT 5"
@@ -114,7 +115,7 @@ app.get("/dashboard", requireLogin, async (req, res) => {
 });
 
 // Borrow a book
-app.post("/borrow/:id", requireLogin, async (req, res) => {
+/*app.post("/borrow/:id", requireLogin, async (req, res) => {
   const bookId = parseInt(req.params.id);
   try {
     const [existing] = await pool.query(
@@ -148,10 +149,10 @@ app.post("/borrow/:id", requireLogin, async (req, res) => {
     console.error(error);
     res.status(500).send("Error borrowing book");
   }
-});
+});*/
 
 // Return a book
-app.post("/return/:id", requireLogin, async (req, res) => {
+/*app.post("/return/:id", requireLogin, async (req, res) => {
   const bookId = parseInt(req.params.id);
   try {
     const [borrowed] = await pool.query(
@@ -174,10 +175,10 @@ app.post("/return/:id", requireLogin, async (req, res) => {
     console.error(error);
     res.status(500).send("Error returning book");
   }
-});
+});*/
 
 // Search books
-app.get("/search", requireLogin, async (req, res) => {
+app.get("/search", authenticator.requireLogin, async (req, res) => {
   const { query } = req.query;
   try {
     const [filteredBooks] = await pool.query(
