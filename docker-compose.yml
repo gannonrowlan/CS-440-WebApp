@@ -1,0 +1,45 @@
+version: 22.13.1
+
+
+services:
+  app-service:
+      build: 
+      ports: "8080:8080"
+  
+  authentication-service:
+    build: ./authentication_service
+    ports: "5001:5001"  
+  book-service:
+    build: ./book_service
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./book_service:/app
+      - book_data:/app/data
+    networks:
+      - booknet
+
+
+  borrow-return-service:
+    build: ./borrow_return_service
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./review_service:/app
+      - review_data:/app/data
+    environment:
+      - BOOK_SERVICE_URL=http://book-service:5002/api/books
+    networks:
+      - booknet
+    depends_on:
+      - book-service
+
+
+networks:
+  booknet:
+    driver: bridge
+
+
+volumes:
+  book_data:
+  review_data:

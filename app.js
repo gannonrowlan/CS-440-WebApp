@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
-import booksRoutes from "./books.js";
+import booksRoutes from "./book_service/books.js";
 
 dotenv.config();
 const app = express();
