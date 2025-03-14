@@ -7,7 +7,7 @@ services:
         - "8080:8080"
       volumes:
         - ./app_service:/app
-        - data:/LibrarySystem
+        - data:../LibrarySystem
 
   
   authentication-service:
