@@ -15,6 +15,8 @@ services:
       - "5001:5001"  
     volumes:
       - ./authentication_service:/app
+      - book_data:/app/LibrarySystem
+    
   book-service:
     build: ./book_service
     ports:
@@ -24,7 +26,6 @@ services:
       - book_data:/app/LibrarySystem
     networks:
       - booknet
-
 
   borrow-return-service:
     build: ./borrow_return_service
