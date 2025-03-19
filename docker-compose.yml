@@ -32,8 +32,8 @@ services:
     networks:
       - booknet
 
-  borrow-return-service:
-    build: ./borrow_return_service
+  borrow-return-services:
+    build: ./borrow_return_services
     ports:
       - "5003:5003"
     volumes:

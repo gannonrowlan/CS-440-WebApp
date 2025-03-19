@@ -1,5 +1,7 @@
 FROM node:22.13.1-slim
 WORKDIR /app
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 #RUN apt-get update && \
 #    apt-get install -y --no-install-recommends python3 python3-pip && \
 #    rm -rf /var/lib/apt/lists/*
