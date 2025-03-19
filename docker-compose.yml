@@ -8,6 +8,8 @@ services:
       volumes:
         - ./app_service:/app
         - data:../LibrarySystem
+      networks:
+        - booknet
 
   
   authentication-service:
@@ -17,6 +19,8 @@ services:
     volumes:
       - ./authentication_service:/app
       - data:../LibrarySystem
+    networks:
+      - booknet
     
   book-service:
     build: ./book_service
