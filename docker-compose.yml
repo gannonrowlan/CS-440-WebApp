@@ -1,0 +1,36 @@
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./auth-service/.env
+    depends_on:
+      - db
+
+  borrow-service:
+    build: ./borrow-service
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./borrow-service/.env
+    depends_on:
+      - db
+
+  book-service:
+    build: ./book-service
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./book-service/.env
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: library_db
+    ports:
+      - "3306:3306"
