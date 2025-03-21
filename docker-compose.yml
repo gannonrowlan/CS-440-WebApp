@@ -1,4 +1,19 @@
 services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - borrow-service
+      - book-service
+    environment:
+      - PORT=8000
+      - AUTH_SERVICE_URL=http://auth-service:5000
+      - BORROW_SERVICE_URL=http://borrow-service:5001
+      - BOOK_SERVICE_URL=http://book-service:5002
+    restart: always
+
   auth-service:
     build: ./auth-service
     ports:
@@ -7,6 +22,7 @@ services:
       - ./auth-service/.env
     depends_on:
       - db
+    restart: always
 
   borrow-service:
     build: ./borrow-service
@@ -16,6 +32,7 @@ services:
       - ./borrow-service/.env
     depends_on:
       - db
+    restart: always
 
   book-service:
     build: ./book-service
@@ -25,6 +42,7 @@ services:
       - ./book-service/.env
     depends_on:
       - db
+    restart: always
 
   db:
     image: mysql:8

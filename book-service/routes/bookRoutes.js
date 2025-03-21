@@ -1,13 +1,10 @@
 import express from "express";
 import pool from "../db.js";
 
-import express from "express";
-import pool from "./db.js";
-
 const router = express.Router();
 
 // Fetch 5 random books
-booksRoutes.get("/random", async (req, res) => {
+bookRoutes.get("/random", async (req, res) => {
   try {
     const [results] = await pool.query(
       "SELECT * FROM Books ORDER BY RAND() LIMIT 5"
@@ -19,7 +16,7 @@ booksRoutes.get("/random", async (req, res) => {
 });
 
 // Search for books
-booksRoutes.get("/search", async (req, res) => {
+bookRoutes.get("/search", async (req, res) => {
   const query = req.query.query;
   try {
     const [results] = await pool.query(
@@ -33,7 +30,7 @@ booksRoutes.get("/search", async (req, res) => {
 });
 
 // Fetch all books in alphabetical order
-booksRoutes.get("/all", async (req, res) => {
+bookRoutes.get("/all", async (req, res) => {
   try {
     const [results] = await pool.query(
       "SELECT * FROM Books ORDER BY title ASC"
@@ -45,7 +42,7 @@ booksRoutes.get("/all", async (req, res) => {
 });
 
 // Render Manage Books Page (for Admin)
-booksRoutes.get("/manage-books", async (req, res) => {
+bookRoutes.get("/manage-books", async (req, res) => {
   try {
     const [books] = await pool.query("SELECT * FROM Books ORDER BY title ASC");
     res.render("manage-books", { books });
@@ -55,7 +52,7 @@ booksRoutes.get("/manage-books", async (req, res) => {
 });
 
 // Add a new book
-booksRoutes.post("/add", async (req, res) => {
+bookRoutes.post("/add", async (req, res) => {
   const { title, author, genre, available } = req.body;
   try {
     await pool.query(
@@ -69,7 +66,7 @@ booksRoutes.post("/add", async (req, res) => {
 });
 
 // Update available copies of a book
-booksRoutes.post("/update/:id", async (req, res) => {
+bookRoutes.post("/update/:id", async (req, res) => {
   const bookId = req.params.id;
   const { available } = req.body;
   try {
@@ -84,7 +81,7 @@ booksRoutes.post("/update/:id", async (req, res) => {
 });
 
 // Delete a book
-booksRoutes.post("/delete/:id", async (req, res) => {
+bookRoutes.post("/delete/:id", async (req, res) => {
   const bookId = req.params.id;
   try {
     await pool.query("DELETE FROM Books WHERE id = ?", [bookId]);

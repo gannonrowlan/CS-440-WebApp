@@ -1,33 +1,39 @@
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import dotenv from "dotenv";
 
-env.config();
+dotenv.config();
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-// API Gateway routes
+// Proxy Routes for Microservices
 app.use(
-  "/auth",
+  "/auth-service",
   createProxyMiddleware({
     target: "http://auth-service:5000",
     changeOrigin: true,
   })
 );
 app.use(
-  "/borrow",
+  "/borrow-sevice",
   createProxyMiddleware({
     target: "http://borrow-service:5001",
     changeOrigin: true,
   })
 );
 app.use(
-  "/books",
+  "/book-service",
   createProxyMiddleware({
-    target: "http://books-service:5002",
+    target: "http://book-service:5002",
     changeOrigin: true,
   })
 );
 
+// Default Route
+app.get("/", (req, res) => {
+  res.send("API Gateway is running...");
+});
+
 app.listen(PORT, () => {
-  console.log(`API Gateway is running on port ${PORT}`);
+  console.log(`API Gateway running on port ${PORT}`);
 });

@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import session from "express-session";
 import bookRoutes from "./routes/bookRoutes.js";
