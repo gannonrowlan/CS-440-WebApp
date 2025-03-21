@@ -4,7 +4,7 @@ import pool from "../db.js";
 const router = express.Router();
 
 // Fetch 5 random books
-bookRoutes.get("/random", async (req, res) => {
+router.get("/random", async (req, res) => {
   try {
     const [results] = await pool.query(
       "SELECT * FROM Books ORDER BY RAND() LIMIT 5"
@@ -16,7 +16,7 @@ bookRoutes.get("/random", async (req, res) => {
 });
 
 // Search for books
-bookRoutes.get("/search", async (req, res) => {
+router.get("/search", async (req, res) => {
   const query = req.query.query;
   try {
     const [results] = await pool.query(
@@ -30,7 +30,7 @@ bookRoutes.get("/search", async (req, res) => {
 });
 
 // Fetch all books in alphabetical order
-bookRoutes.get("/all", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const [results] = await pool.query(
       "SELECT * FROM Books ORDER BY title ASC"
@@ -42,7 +42,7 @@ bookRoutes.get("/all", async (req, res) => {
 });
 
 // Render Manage Books Page (for Admin)
-bookRoutes.get("/manage-books", async (req, res) => {
+router.get("/manage-books", async (req, res) => {
   try {
     const [books] = await pool.query("SELECT * FROM Books ORDER BY title ASC");
     res.render("manage-books", { books });
@@ -52,7 +52,7 @@ bookRoutes.get("/manage-books", async (req, res) => {
 });
 
 // Add a new book
-bookRoutes.post("/add", async (req, res) => {
+router.post("/add", async (req, res) => {
   const { title, author, genre, available } = req.body;
   try {
     await pool.query(
@@ -66,7 +66,7 @@ bookRoutes.post("/add", async (req, res) => {
 });
 
 // Update available copies of a book
-bookRoutes.post("/update/:id", async (req, res) => {
+router.post("/update/:id", async (req, res) => {
   const bookId = req.params.id;
   const { available } = req.body;
   try {
@@ -81,7 +81,7 @@ bookRoutes.post("/update/:id", async (req, res) => {
 });
 
 // Delete a book
-bookRoutes.post("/delete/:id", async (req, res) => {
+router.post("/delete/:id", async (req, res) => {
   const bookId = req.params.id;
   try {
     await pool.query("DELETE FROM Books WHERE id = ?", [bookId]);

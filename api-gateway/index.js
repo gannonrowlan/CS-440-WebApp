@@ -8,24 +8,27 @@ const PORT = process.env.PORT || 8000;
 
 // Proxy Routes for Microservices
 app.use(
-  "/auth-service",
+  "/auth",
   createProxyMiddleware({
-    target: "http://auth-service:5000",
+    target: process.env.AUTH_SERVICE_URL || "http://auth-service:5000",
     changeOrigin: true,
+    pathRewrite: { "^/auth": "" },
   })
 );
 app.use(
-  "/borrow-sevice",
+  "/borrow-service",
   createProxyMiddleware({
-    target: "http://borrow-service:5001",
+    target: process.env.BORROW_SERVICE_URL || "http://borrow-service:5001",
     changeOrigin: true,
+    pathRewrite: { "^/borrow": "" },
   })
 );
 app.use(
   "/book-service",
   createProxyMiddleware({
-    target: "http://book-service:5002",
+    target: process.env.BOOK_SERVICE_URL || "http://book-service:5002",
     changeOrigin: true,
+    pathRewrite: { "^/book": "" },
   })
 );
 

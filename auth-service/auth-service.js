@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import session from "express-session";
 import authRoutes from "./routes/authRoutes.js";
@@ -21,7 +20,7 @@ app.use(
   })
 );
 
-app.use("/auth-service", authRoutes);
+app.use("/", authRoutes);
 
 app.listen(port, () => {
   console.log(`Auth Service running on port ${port}`);
