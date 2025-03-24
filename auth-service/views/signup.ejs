@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
-    <link rel="stylesheet" href="../public/styles/welcome.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
     <div class="container">
       <div class="auth-container">
         <h2>Sign Up</h2>
-        <form action="/signup" method="POST">
+        <form action="/auth/signup" method="POST">
           <div class="form-group">
             <label for="email">Email:</label>
             <input
@@ -33,7 +33,7 @@
           </div>
           <button type="submit" class="btn">Sign Up</button>
         </form>
-        <p>Already have an account? <a href="/login">Login</a></p>
+        <p>Already have an account? <a href="/auth/login">Login</a></p>
       </div>
     </div>
   </body>

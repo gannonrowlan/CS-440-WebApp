@@ -20,7 +20,11 @@ app.use(
   })
 );
 
-app.use("/", authRoutes);
+app.use("/auth", authRoutes);
+
+app.get("/", (req, res) => {
+  res.redirect("/auth/login");
+});
 
 app.listen(port, () => {
   console.log(`Auth Service running on port ${port}`);
