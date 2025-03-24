@@ -12,7 +12,6 @@ const port = process.env.BORROW_PORT || 5001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-
 app.use(
   session({
     secret: "librarySecret",
@@ -28,7 +27,11 @@ const requireLogin = (req, res, next) => {
   next();
 };
 
-app.use("/borrow-service", requireLogin, borrowRoutes);
+app.use("/borrow", requireLogin, borrowRoutes);
+
+app.get("/", (req, res) => {
+  res.redirect("/borrow/dashboard");
+});
 
 app.listen(port, () => {
   console.log(`Borrow Service running on port ${port}`);

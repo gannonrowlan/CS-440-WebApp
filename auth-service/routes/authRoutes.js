@@ -21,7 +21,7 @@ router.post("/login", async (req, res) => {
     if (await bcrypt.compare(password, user.password)) {
       req.session.userId = user.id;
       req.session.username = user.username;
-      res.redirect("/dashboard");
+      res.redirect("http://localhost:5001/dashboard");
     } else {
       res.status(401).send("Incorrect password");
     }

@@ -26,7 +26,7 @@
         <li>
           <%= book.title %> by <%= book.author %> - <%= book.genre %> (<%=
           book.available %> copies available) <% if (book.available > 0) { %>
-          <form action="/borrow/<%= book.id %>" method="POST">
+          <form action="/borrow/borrow/<%= book.id %>" method="POST">
             <button type="submit">Borrow</button>
           </form>
           <% } else { %>
@@ -42,7 +42,7 @@
         <% borrowedBooks.forEach(book => { %>
         <li>
           <%= book.title %> by <%= book.author %> (Due: <%= book.due_date %>)
-          <form action="/return/<%= book.id %>" method="POST">
+          <form action="/borrow/return/<%= book.id %>" method="POST">
             <button type="submit">Return</button>
           </form>
         </li>

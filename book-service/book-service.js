@@ -20,7 +20,11 @@ app.use(
   })
 );
 
-app.use("/book-service", bookRoutes);
+app.use("/books", bookRoutes);
+
+app.get("/", (req, res) => {
+  res.redirect("/books/manage-books");
+});
 
 app.listen(port, () => {
   console.log(`Book Service running on port ${port}`);
