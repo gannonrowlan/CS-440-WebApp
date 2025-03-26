@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Books</title>
+    <link rel="stylesheet" href="/styles/dashboard.css" />
+  </head>
+  <body>
+    <div class="manage-books-container">
+      <h1>Manage Books</h1>
+
+      <!-- Add Book -->
+      <h2>Add a New Book</h2>
+      <form action="/books/add" method="POST">
+        <input type="text" name="title" placeholder="Title" required />
+        <input type="text" name="author" placeholder="Author" required />
+        <input type="text" name="genre" placeholder="Genre" required />
+        <input type="number" name="available" placeholder="Copies" required />
+        <button type="submit">Add Book</button>
+      </form>
+
+      <!-- Book List -->
+      <h2>All Books (Alphabetical Order)</h2>
+      <ul>
+        <% books.forEach(book => { %>
+        <li>
+          <div class="book-info">
+            <strong><%= book.title %></strong> by <%= book.author %> - <%=
+            book.genre %> (<%= book.available %> copies available)
+          </div>
+
+          <div class="book-actions">
+            <!-- Update Available Copies -->
+            <form action="/books/update/<%= book.id %>" method="POST">
+              <input
+                type="number"
+                name="available"
+                value="<%= book.available %>"
+                min="0"
+                required
+              />
+              <button type="submit">Update</button>
+            </form>
+
+            <!-- Delete Book -->
+            <form action="/books/delete/<%= book.id %>" method="POST">
+              <button
+                type="submit"
+                onclick="return confirm('Are you sure you want to delete this book?');"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+        </li>
+        <% }); %>
+      </ul>
+
+      <a href="/dashboard">Back to Dashboard</a>
+    </div>
+  </body>
+</html>

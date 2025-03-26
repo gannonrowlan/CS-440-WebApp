@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles/dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <h1>Welcome!</h1>
+
+      <!-- Search Bar -->
+      <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Search for books..." />
+        <button type="submit">Search</button>
+      </form>
+
+      <h2>Search Results</h2>
+      <ul id="bookResults"></ul>
+
+      <!-- Recommended Books Section -->
+      <h2>Recommended Books</h2>
+      <ul>
+        <% books.forEach(book => { %>
+        <li>
+          <%= book.title %> by <%= book.author %> - <%= book.genre %> (<%=
+          book.available %> copies available) <% if (book.available > 0) { %>
+          <form action="/borrow/<%= book.id %>" method="POST">
+            <button type="submit">Borrow</button>
+          </form>
+          <% } else { %>
+          <span>Not Available</span>
+          <% } %>
+        </li>
+        <% }); %>
+      </ul>
+
+      <!-- Borrowed Books -->
+      <h2>Your Borrowed Books</h2>
+      <ul>
+        <% borrowedBooks.forEach(book => { %>
+        <li>
+          <%= book.title %> by <%= book.author %> (Due: <%= book.due_date %>)
+          <form action="/return/<%= book.id %>" method="POST">
+            <button type="submit">Return</button>
+          </form>
+        </li>
+        <% }); %>
+      </ul>
+
+      <a href="/books/manage-books"><button>Manage Books</button></a>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("searchForm")
+          .addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const query = document.getElementById("searchInput").value.trim();
+            if (!query) return;
+
+            fetch(`/books/search?query=${query}`)
+              .then((res) => res.json())
+              .then((data) => {
+                const container = document.getElementById("bookResults");
+                if (data.length > 0) {
+                  container.innerHTML = data
+                    .map(
+                      (book) => `
+                      <li>
+                        ${book.title} by ${book.author} - ${book.genre} (${
+                        book.available
+                      } copies available)
+                        ${
+                          book.available > 0
+                            ? `
+                          <form action="/borrow/${book.id}" method="POST">
+                            <button type="submit">Borrow</button>
+                          </form>
+                        `
+                            : `<span>Not Available</span>`
+                        }
+                      </li>
+                    `
+                    )
+                    .join("");
+                } else {
+                  container.innerHTML = "<p>No books found.</p>";
+                }
+              })
+              .catch((err) => console.error("Error searching books:", err));
+          });
+      });
+    </script>
+  </body>
+</html>
