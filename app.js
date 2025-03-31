@@ -6,6 +6,7 @@ import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
 import booksRoutes from "./books.js";
+import zerotrust from "./zerotrust.js";
 
 dotenv.config();
 const app = express();
