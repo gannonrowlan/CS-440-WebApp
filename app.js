@@ -5,11 +5,11 @@ import bcrypt from "bcrypt";
 import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
-import booksRoutes from "./book_service/books.js";
+import booksRoutes from "./books.js";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
