@@ -2,11 +2,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
-import pool from "./db.js";
+//import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
 import booksRoutes from "./books.js";
-import zerotrust from "./zerotrust.js";
 
 dotenv.config();
 const app = express();
@@ -122,7 +121,7 @@ app.post("/borrow/:id", requireLogin, async (req, res) => {
       "SELECT * FROM borrowed_books WHERE book_id = ? AND user_id = ?",
       [bookId, req.session.userId]
     );
-    if (existing.length > 0/*&& verify account is true */) {
+    if (existing.length > 0) {
       return res.status(400).send("You have already borrowed this book");
     }
     const [book] = await pool.query(
@@ -159,7 +158,7 @@ app.post("/return/:id", requireLogin, async (req, res) => {
       "SELECT * FROM borrowed_books WHERE book_id = ? AND user_id = ?",
       [bookId, req.session.userId]
     );
-    if (borrowed.length === 0/*&& verify account is true */) {
+    if (borrowed.length === 0) {
       return res.status(400).send("Book not found in borrowed list");
     }
     await pool.query(
