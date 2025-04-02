@@ -122,7 +122,7 @@ app.post("/borrow/:id", requireLogin, async (req, res) => {
       "SELECT * FROM borrowed_books WHERE book_id = ? AND user_id = ?",
       [bookId, req.session.userId]
     );
-    if (existing.length > 0) {
+    if (existing.length > 0/*&& verify account is true */) {
       return res.status(400).send("You have already borrowed this book");
     }
     const [book] = await pool.query(
@@ -159,7 +159,7 @@ app.post("/return/:id", requireLogin, async (req, res) => {
       "SELECT * FROM borrowed_books WHERE book_id = ? AND user_id = ?",
       [bookId, req.session.userId]
     );
-    if (borrowed.length === 0) {
+    if (borrowed.length === 0/*&& verify account is true */) {
       return res.status(400).send("Book not found in borrowed list");
     }
     await pool.query(
