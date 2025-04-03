@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import session from "express-session";
 import borrowRoutes from "./routes/borrowRoutes.js";
+import zerotrust from "../zerotrust.js"
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,7 @@ const requireLogin = (req, res, next) => {
 
 app.use("/borrow", requireLogin, borrowRoutes);
 
+// verify account from requirelogin
 app.get("/", (req, res) => {
   res.redirect("/borrow/dashboard");
 });
