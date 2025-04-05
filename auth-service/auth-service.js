@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import session from "express-session";
 import authRoutes from "./routes/authRoutes.js";
-
+import zerotrust from "../zerotrust.js"
 dotenv.config();
 const app = express();
 const port = process.env.AUTH_PORT || 5000;
@@ -21,10 +21,10 @@ app.use(
 );
 
 app.use("/auth", authRoutes);
-
-app.get("/", (req, res) => {
-  res.redirect("/auth/login");
-});
+zerotrust.verifyAccount("auth-service")
+//app.get("/", (req, res) => {
+//  res.redirect("/auth/login");
+//});
 
 app.listen(port, () => {
   console.log(`Auth Service running on port ${port}`);

@@ -29,11 +29,11 @@ const requireLogin = (req, res, next) => {
 };
 
 app.use("/borrow", requireLogin, borrowRoutes);
-
 // verify account from requirelogin
-app.get("/", (req, res) => {
-  res.redirect("/borrow/dashboard");
-});
+zerotrust.verifyAccount("borrow-service")
+//app.get("/", (req, res) => {
+//  res.redirect("/borrow/dashboard");
+//});
 
 app.listen(port, () => {
   console.log(`Borrow Service running on port ${port}`);

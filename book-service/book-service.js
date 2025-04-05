@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import session from "express-session";
 import bookRoutes from "./routes/bookRoutes.js";
+import zerotrust from "../zerotrust.js"
 
 dotenv.config();
 const app = express();
@@ -21,10 +22,10 @@ app.use(
 );
 
 app.use("/books", bookRoutes);
-
-app.get("/", (req, res) => {
-  res.redirect("/books/manage-books");
-});
+zerotrust.verifyAccount("book-service")
+//app.get("/", (req, res) => {
+//  res.redirect("/books/manage-books");
+//});
 
 app.listen(port, () => {
   console.log(`Book Service running on port ${port}`);
