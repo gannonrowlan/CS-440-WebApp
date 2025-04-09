@@ -2,3 +2,4 @@
 .vs
 mysql_script.sql
 db.js
+docker-compose.yml

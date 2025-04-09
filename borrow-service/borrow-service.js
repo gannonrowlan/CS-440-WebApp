@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import session from "express-session";
 import borrowRoutes from "./routes/borrowRoutes.js";
-import zerotrust from "../zerotrust.js"
+import zerotrust from "../api-gateway/index.js"
 
 dotenv.config();
 const app = express();

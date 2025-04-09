@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import session from "express-session";
 import authRoutes from "./routes/authRoutes.js";
-import zerotrust from "../zerotrust.js"
+import zerotrust from "../api-gateway/index.js"
 dotenv.config();
 const app = express();
 const port = process.env.AUTH_PORT || 5000;

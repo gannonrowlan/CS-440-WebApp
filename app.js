@@ -9,7 +9,7 @@ import booksRoutes from "./books.js";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
