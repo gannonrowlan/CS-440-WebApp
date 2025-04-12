@@ -6,11 +6,12 @@ import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
 import booksRoutes from "./books.js";
-import * as zeroTrust from "./zerotrust.js"
+import verifyAccount from "./zeroTrust/zerotrust.mjs"
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
+//const zeroTrust = import("./zeroTrust/zerotrust.mjs")
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -124,7 +125,7 @@ app.post("/borrow/:id", requireLogin, async (req, res) => {
       "SELECT * FROM borrowed_books WHERE book_id = ? AND user_id = ?",
       [bookId, req.session.userId]
     );
-    if (existing.length > 0 && zeroTrust.verifyAccount("borrow-service")) { // verify that borrow is true
+    if (existing.length > 0 && verifyAccount("borrow-service")) { // verify that borrow is true
       return res.status(400).send("You have already borrowed this book"); 
     }
     const [book] = await pool.query(
