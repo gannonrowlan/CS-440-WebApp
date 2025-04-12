@@ -1,6 +1,6 @@
 import express from "express";
 import pool from "./db.js";
-//import zeroTrust from "./zerotrust.js";
+//import * as zeroTrust from "./zerotrust.js";
 
 const booksRoutes = express.Router();
 
