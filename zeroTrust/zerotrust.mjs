@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-import express from "express";
+//import dotenv from "dotenv";
+//import express from "express";
 import pool from "../db.js";
 
 // verify which service is calling it
@@ -18,20 +18,25 @@ function verifyAccount (service)
             if (pool.query(
                 "SELECT * FROM Users WHERE user_id = ?"
                 [req.session.userId]))
-                res.redirect("/borrow/dashboard");
+                //res.redirect("/borrow/dashboard");
+                res.redirect("books/manage-books");
             }
             break;
         case "book-service":
+            (req, res) => {
             if (pool.query(
                 "SELECT * FROM Users WHERE user_id = ? AND email = ?",
                 [req.session.userId, email]))
                 res.redirect("/books/manage-books");
+            }
             break;
         case "auth-service":
+            (req, res) => {
             if (pool.query(
                 "SELECT * FROM Users WHERE user_id = ? AND email = ?",
                 [req.session.userId, email]))
                 res.redirect("/auth/login");
+            }
             break;
     }
 }

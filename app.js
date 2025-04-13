@@ -11,7 +11,6 @@ import verifyAccount from "./zeroTrust/zerotrust.mjs"
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
-//const zeroTrust = import("./zeroTrust/zerotrust.mjs")
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -119,6 +118,7 @@ app.get("/dashboard", requireLogin, async (req, res) => {
 
 // Borrow a book
 app.post("/borrow/:id", requireLogin, async (req, res) => {
+//app.post("/borrow/:id", verifyAccount("borrow-service"), async (req, res) => {
   const bookId = parseInt(req.params.id);
   try {
     const [existing] = await pool.query(
