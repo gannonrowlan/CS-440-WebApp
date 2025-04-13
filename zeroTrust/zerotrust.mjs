@@ -1,5 +1,5 @@
-//import dotenv from "dotenv";
-//import express from "express";
+import dotenv from "dotenv";
+import express from "express";
 import pool from "../db.js";
 
 // verify which service is calling it
@@ -14,10 +14,12 @@ function verifyAccount (service)
             console.log("service not valid");
             break;
         case "borrow-service":
+            (req, res) => {
             if (pool.query(
                 "SELECT * FROM Users WHERE user_id = ?"
                 [req.session.userId]))
                 res.redirect("/borrow/dashboard");
+            }
             break;
         case "book-service":
             if (pool.query(
