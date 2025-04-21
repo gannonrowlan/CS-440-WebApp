@@ -1,43 +1,31 @@
 //import dotenv from "dotenv";
-import express from "express";
 import pool from "../db.js";
 
 // verify which service is calling it
 // verify account exists function
-    // return querey to database that account email is in database (true or false)
+// return querey to database that account email is in database (true or false)
 export default verifyAccount;
-const app = express();
-function verifyAccount (service)
-{
-    switch (service)
-    {
-        default:
-            console.log("service not valid");
-            break;
-        case "borrow-service":
-            app.post("/borrow/:id", async(req, res) => {
-            if (pool.query(
-                "SELECT * FROM Users WHERE user_id = ?"
-                [req.session.userId]))
-                //res.redirect("/borrow/dashboard");
-                res.redirect("books/manage-books");
-            })
-            break;
-        case "book-service":
-            (req, res) => {
-            if (pool.query(
-                "SELECT * FROM Users WHERE user_id = ? AND email = ?",
-                [req.session.userId, email]))
-                res.redirect("/books/manage-books");
-            }
-            break;
-        case "auth-service":
-            (req, res) => {
-            if (pool.query(
-                "SELECT * FROM Users WHERE user_id = ? AND email = ?",
-                [req.session.userId, email]))
-                res.redirect("/auth/login");
-            }
-            break;
+function verifyAccount(service) {
+  return async function (req, res, next) {
+    const userId = req.session?.userId;
+    if (!userId) return res.status(401).send("Not authenticated");
+
+    try {
+      const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [
+        userId,
+      ]);
+      if (rows.length === 0) return res.status(403).send("User not found");
+
+      const user = rows[0];
+
+      if (service === "admin-service" && user.role !== "admin") {
+        return res.status(403).send("Admin access only");
+      }
+
+      next();
+    } catch (err) {
+      console.error("Zero Trust check failed", err);
+      return res.status(500).send("Zero Trust error");
     }
+  };
 }
