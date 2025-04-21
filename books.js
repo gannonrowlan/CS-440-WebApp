@@ -1,5 +1,6 @@
 import express from "express";
 import pool from "./db.js";
+import updateDashboard from "./blackboard/blackboard.mjs";
 
 const booksRoutes = express.Router();
 
@@ -59,7 +60,9 @@ booksRoutes.post("/add", async (req, res) => {
       "INSERT INTO Books (title, author, genre, available) VALUES (?, ?, ?, ?)",
       [title, author, genre, available]
     );
+    updateDashboard("add")
     res.redirect("/books/manage-books");
+
   } catch (err) {
     return res.status(500).json({ error: "Error adding book" });
   }
@@ -85,6 +88,7 @@ booksRoutes.post("/delete/:id", async (req, res) => {
   const bookId = req.params.id;
   try {
     await pool.query("DELETE FROM Books WHERE id = ?", [bookId]);
+    updateDashboard("delete")
     res.redirect("/books/manage-books");
   } catch (err) {
     return res.status(500).json({ error: "Error deleting book" });
