@@ -11,10 +11,10 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
 
-module.exports = {
-  app,
-  port
-};
+//module.exports = {
+//  app,
+//  port
+//};
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
