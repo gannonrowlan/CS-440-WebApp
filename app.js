@@ -6,7 +6,7 @@ import pool from "./db.js";
 import dotenv from "dotenv";
 import session from "express-session";
 import booksRoutes from "./books.js";
-import verifyAccount from "./zeroTrust/zerotrust.mjs"
+import verifyAccount from "./zeroTrust/zerotrust.mjs";
 
 dotenv.config();
 const app = express();
@@ -25,15 +25,7 @@ app.use(
 );
 app.use("/books", booksRoutes);
 
-// Authentication Middleware
-const requireLogin = (req, res, next) => {
-  if (!req.session.userId) {
-  //if (zeroTrust.verifyAccount("auth-service")) {
-    return res.redirect("/login");
-  }
-  next();
-};
-//};
+const requireLogin = verifyAccount("user-service");
 
 // Welcome Page
 app.get("/", (req, res) => {
@@ -118,15 +110,16 @@ app.get("/dashboard", requireLogin, async (req, res) => {
 
 // Borrow a book
 app.post("/borrow/:id", requireLogin, async (req, res) => {
-//app.post("/borrow/:id", verifyAccount("borrow-service"), async (req, res) => {
+  //app.post("/borrow/:id", verifyAccount("borrow-service"), async (req, res) => {
   const bookId = parseInt(req.params.id);
   try {
     const [existing] = await pool.query(
       "SELECT * FROM borrowed_books WHERE book_id = ? AND user_id = ?",
       [bookId, req.session.userId]
     );
-    if (existing.length > 0 && verifyAccount("borrow-service")) { // verify that borrow is true
-      return res.status(400).send("You have already borrowed this book"); 
+    if (existing.length > 0) {
+      // verify that borrow is true
+      return res.status(400).send("You have already borrowed this book");
     }
     const [book] = await pool.query(
       "SELECT available FROM books WHERE id = ?",
