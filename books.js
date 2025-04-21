@@ -1,8 +1,9 @@
 import express from "express";
 import pool from "./db.js";
-import verifyAccount from "./zeroTrust/zerotrust.mjs"
+import verifyAccount from "./zeroTrust/zerotrust.mjs";
 
 const booksRoutes = express.Router();
+const requireAdmin = verifyAccount("admin-service");
 
 // Fetch 5 random books
 booksRoutes.get("/random", async (req, res) => {
@@ -43,7 +44,7 @@ booksRoutes.get("/all", async (req, res) => {
 });
 
 // Render Manage Books Page (for Admin)
-booksRoutes.get("/manage-books", async (req, res) => {
+booksRoutes.get("/manage-books", requireAdmin, async (req, res) => {
   try {
     const [books] = await pool.query("SELECT * FROM Books ORDER BY title ASC");
     res.render("manage-books", { books });
@@ -53,7 +54,7 @@ booksRoutes.get("/manage-books", async (req, res) => {
 });
 
 // Add a new book
-booksRoutes.post("/add", async (req, res) => {
+booksRoutes.post("/add", requireAdmin, async (req, res) => {
   const { title, author, genre, available } = req.body;
   try {
     await pool.query(
@@ -67,7 +68,7 @@ booksRoutes.post("/add", async (req, res) => {
 });
 
 // Update available copies of a book
-booksRoutes.post("/update/:id", async (req, res) => {
+booksRoutes.post("/update/:id", requireAdmin, async (req, res) => {
   const bookId = req.params.id;
   const { available } = req.body;
   try {
@@ -82,7 +83,7 @@ booksRoutes.post("/update/:id", async (req, res) => {
 });
 
 // Delete a book
-booksRoutes.post("/delete/:id", async (req, res) => {
+booksRoutes.post("/delete/:id", requireAdmin, async (req, res) => {
   const bookId = req.params.id;
   try {
     await pool.query("DELETE FROM Books WHERE id = ?", [bookId]);
