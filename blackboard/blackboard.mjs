@@ -9,7 +9,7 @@ import path from "path"
 
 const filePath = path.resolve("../views/dashboard.ejs");0
 const newFilePath = path.resolve("../views/dashboard_new.ejs")
-const ejsContent = fs.readFileSync(filePath, 'utf-8');
+//const ejsContent = fs.readFileSync(filePath, 'utf-8');
 console.log(filePath);
 //const ejsContent ;
 const updateBook = {newText: "a new book has been added."}
@@ -27,19 +27,17 @@ function updateDashboard(action)
     {
         case "add":
           // just write to dashboard that new book has been added for debugging
-          booksRoutes.get("/dashboard", async (req, res) => {
-             try {
-                //res.json({text: "new book added."})
-                dashboard = ejs.render(ejsContent, updateBook)
-                fs.writeFileSync(newFilePath, dashboard);
-                res.redirect("/dashboard_new");
-                console.log("new book has been added")
-             }
+          try {
+            //res.json({text: "new book added."})
+            dashboard = ejs.render(ejsContent, updateBook)
+            fs.writeFileSync(newFilePath, dashboard);
+            res.redirect("/dashboard_new");
+            console.log("new book has been added")
+          }
 
-             catch(err) {
-                return res.status(500).json({ error: "Error updating dashboard" });
-             }
-          })
+         catch(err) {
+            return res.status(500).json({ error: "Error updating dashboard" });
+         }
           break;
         case "delete":
           // just write to dashboard that a book has been removed for debugging
