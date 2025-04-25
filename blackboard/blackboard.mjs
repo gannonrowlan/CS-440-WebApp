@@ -1,57 +1,32 @@
-//import dotenv from "dotenv";
-import express from "express";
 import pool from "../db.js";
-import MySQLEvents from "mysql-events";
-import booksRoutes from "../books.js";
-import fs from "fs";
-import ejs from "ejs";
-import path from "path"
 
-const filePath = path.resolve("../views/dashboard.ejs");0
-const newFilePath = path.resolve("../views/dashboard_new.ejs")
-//const ejsContent = fs.readFileSync(filePath, 'utf-8');
-console.log(filePath);
-//const ejsContent ;
-const updateBook = {newText: "a new book has been added."}
-const removeBook = {newText: "a book has been removed."}
-
-//const constants = require("../app.cjs")
-//console.log(constants.app)
-//console.log(constants.port)
 export default updateDashboard;
 
 //const app = express()
-function updateDashboard(action)
+function updateDashboard(maxID)
 {
-    switch (action)
-    {
-        case "add":
-          // just write to dashboard that new book has been added for debugging
-          try {
-            //res.json({text: "new book added."})
-            dashboard = ejs.render(ejsContent, updateBook)
-            fs.writeFileSync(newFilePath, dashboard);
-            res.redirect("/dashboard_new");
-            console.log("new book has been added")
-          }
+  //let maxID = 0;
+  return async function (req, res, next) 
+  {
+    // just write to dashboard that new book has been added for debugging
+    try {
+      //const LAST_INSERT_ID = await pool.query("SELECT LAST_INSERT_ID();");
+      const [rows] = await pool.query("select * from Books;")
+      //const NEW_LAST_INSERT_ID = await pool.query("SELECT LAST_INSERT_ID();");
+      
+      if (rows.length === 0) return res.status(403).send("No new book added"); 
 
-         catch(err) {
-            return res.status(500).json({ error: "Error updating dashboard" });
-         }
-          break;
-        case "delete":
-          // just write to dashboard that a book has been removed for debugging
-          booksRoutes.get("/dashboard", async (req, res) => {
-            try {
-                //res.json({text: "a book has been removed."})
-                const dashboard = ejs.render(ejsContent, removeBook)
-                console.log("a book has been removed")
-            }
-
-            catch(err) {
-               return res.status(500).json({ error: "Error updating dashboard" });
-            }
-          })
-          break;
-    }
+      for(let i = 0; i < rows.length; i++)
+      {
+        // assign higher id if index is higher than last
+        id = i;
+        if(id > maxID) maxID = id;
+      }
+      //return maxID;
+      console.log("new max id: " + id);
+      next();  // middleware might be left haning
+    } catch(err) {
+      return res.status(500).json({ error: "Blackboard error" });
+    }    
+  };
 }

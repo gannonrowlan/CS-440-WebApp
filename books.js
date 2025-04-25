@@ -56,11 +56,36 @@ booksRoutes.get("/manage-books", async (req, res) => {
 booksRoutes.post("/add", async (req, res) => {
   const { title, author, genre, available } = req.body;
   try {
+    // blackbcode
+    let maxID = 0;
+    let [rows] = await pool.query("select * from Books;");
+
+    for(let i = 0; i < rows.length; i++)
+    {
+        // assign higher id if index is higher than last
+      let id = i;
+      if(id > maxID) maxID = id;
+    }
+
+    console.log("old max id: " + maxID);
+
     await pool.query(
       "INSERT INTO Books (title, author, genre, available) VALUES (?, ?, ?, ?)",
       [title, author, genre, available]
     );
-    updateDashboard("add")
+    //updateDashboard();
+    let newMaxID = 0;
+    let [newRows] = await pool.query("select * from Books;");
+
+    for(let i = 0; i < newRows.length; i++)
+      {
+          // assign higher id if index is higher than last
+        let newid = i;
+        if(newid > newMaxID) newMaxID = id;
+      }
+  
+      console.log("new max id: " + newMaxID);
+
     res.redirect("/books/manage-books");
 
   } catch (err) {
@@ -88,7 +113,6 @@ booksRoutes.post("/delete/:id", async (req, res) => {
   const bookId = req.params.id;
   try {
     await pool.query("DELETE FROM Books WHERE id = ?", [bookId]);
-    updateDashboard("delete")
     res.redirect("/books/manage-books");
   } catch (err) {
     return res.status(500).json({ error: "Error deleting book" });
