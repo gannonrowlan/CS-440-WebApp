@@ -64,7 +64,6 @@ booksRoutes.post("/add", async (req, res) => {
     );
     countRows();
     //console.log("new max id is: " + maxID);
-    // end of update blackboard code.
     res.redirect("/books/manage-books");
 
   } catch (err) {
