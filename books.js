@@ -1,6 +1,6 @@
 import express from "express";
 import pool from "./db.js";
-import updateDashboard from "./blackboard/blackboard.mjs";
+import countRows from "./blackboard/blackboard.mjs";
 
 const booksRoutes = express.Router();
 
@@ -56,36 +56,33 @@ booksRoutes.get("/manage-books", async (req, res) => {
 booksRoutes.post("/add", async (req, res) => {
   const { title, author, genre, available } = req.body;
   try {
-    // blackbcode
+    // blackboard code
     let maxID = 0;
     let [rows] = await pool.query("select * from Books;");
 
-    for(let i = 0; i < rows.length; i++)
-    {
+    for(let i = 0; i < rows.length; i++) {
         // assign higher id if index is higher than last
       let id = i;
       if(id > maxID) maxID = id;
     }
 
     console.log("old max id: " + maxID);
-
+    // end of blackboard code
     await pool.query(
       "INSERT INTO Books (title, author, genre, available) VALUES (?, ?, ?, ?)",
       [title, author, genre, available]
     );
-    //updateDashboard();
+    // let maxID = countRows(id);
+    // update blackboard code
     let newMaxID = 0;
     let [newRows] = await pool.query("select * from Books;");
-
-    for(let i = 0; i < newRows.length; i++)
-      {
-          // assign higher id if index is higher than last
-        let newid = i;
-        if(newid > newMaxID) newMaxID = id;
-      }
-  
-      console.log("new max id: " + newMaxID);
-
+    for(let j = 0; j < newRows.length; j++) {
+      // assign higher id if index is higher than last
+      let newid = j;
+      if(newid > newMaxID) newMaxID = newid;
+    }
+    console.log("new max id: " + newMaxID);
+    // end of update blackboard code.
     res.redirect("/books/manage-books");
 
   } catch (err) {

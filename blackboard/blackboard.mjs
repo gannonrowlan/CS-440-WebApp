@@ -1,9 +1,9 @@
 import pool from "../db.js";
 
-export default updateDashboard;
+export default countRows;
 
 //const app = express()
-function updateDashboard(maxID)
+function countRows(id)
 {
   //let maxID = 0;
   return async function (req, res, next) 
@@ -23,8 +23,9 @@ function updateDashboard(maxID)
         if(id > maxID) maxID = id;
       }
       //return maxID;
-      console.log("new max id: " + id);
-      next();  // middleware might be left haning
+      console.log("new max id is: " + maxID);
+      //next();  // middleware might be left haning
+      return maxID;
     } catch(err) {
       return res.status(500).json({ error: "Blackboard error" });
     }    
