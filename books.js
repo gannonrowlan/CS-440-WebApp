@@ -56,32 +56,14 @@ booksRoutes.get("/manage-books", async (req, res) => {
 booksRoutes.post("/add", async (req, res) => {
   const { title, author, genre, available } = req.body;
   try {
-    // blackboard code
-    let maxID = 0;
-    let [rows] = await pool.query("select * from Books;");
-
-    for(let i = 0; i < rows.length; i++) {
-        // assign higher id if index is higher than last
-      let id = i;
-      if(id > maxID) maxID = id;
-    }
-
-    console.log("old max id: " + maxID);
-    // end of blackboard code
+    countRows(); // blackboard code
+    //console.log("old max id is: " + maxID)
     await pool.query(
       "INSERT INTO Books (title, author, genre, available) VALUES (?, ?, ?, ?)",
       [title, author, genre, available]
     );
-    // let maxID = countRows(id);
-    // update blackboard code
-    let newMaxID = 0;
-    let [newRows] = await pool.query("select * from Books;");
-    for(let j = 0; j < newRows.length; j++) {
-      // assign higher id if index is higher than last
-      let newid = j;
-      if(newid > newMaxID) newMaxID = newid;
-    }
-    console.log("new max id: " + newMaxID);
+    countRows();
+    //console.log("new max id is: " + maxID);
     // end of update blackboard code.
     res.redirect("/books/manage-books");
 
